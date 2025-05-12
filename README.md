@@ -32,18 +32,23 @@ MediGuide uses a **local LLM (via Ollama)** + a **vector database (FAISS)** to:
 ## 🗂️ Project Structure
 
 ```
-mediGuide/
-├── data/               # Drug PDFs (not pushed to GitHub)
-├── rag/
-│   ├── ingest.py       # Load, chunk, embed, and index PDFs
-│   ├── rag_chain.py    # RAG pipeline (retriever + LLM)
+MediGuide/
 ├── app/
-│   └── main.py         # FastAPI endpoint: POST /ask
-├── faiss_index/        # Vector DB (ignored in Git)
-├── .env.template       # For secrets (if needed)
-├── requirements.txt
+│   └── main.py                # FastAPI app
+├── data/
+│   └── who_drug_data.pdf      # Source PDF
+├── notebooks/                 # (Optional) Jupyter notebooks
+├── rag/
+│   ├── ingest.py              # PDF ingestion & indexing
+│   ├── rag_chain.py           # RAG chain setup
+│   └── faiss_index/
+│       ├── index.faiss        # FAISS vector store
+│       └── index.pkl
+├── tests/                     # Future unit tests
+├── venv/                      # Virtual environment (should be ignored)
 ├── .gitignore
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
 ---
