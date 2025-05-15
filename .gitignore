@@ -10,8 +10,8 @@ venv/
 .env.*
 
 # FAISS index files
-faiss_index/
-*.faiss
+#faiss_index/
+#*.faiss
 
 # Data files
 data/*.pdf
