@@ -2,7 +2,7 @@
 
 MediGuide is a lightweight, local **RAG (Retrieval-Augmented Generation)** app that lets users ask natural language questions about common medications and receive helpful answers based on trusted medical documents.
 
-🚀 Built in one day to demonstrate applied NLP, LangChain, and LLM deployment skills.
+🚀 Built in one day to demonstrate applied NLP, LangChain, and LLM deployment skills, now containerized using Docker for reproducibility and deployment.
 
 ---
 
@@ -26,6 +26,7 @@ MediGuide uses a **local LLM (via Ollama)** + a **vector database (FAISS)** to:
 - **FAISS** — Fast vector similarity search
 - **HuggingFace Sentence Transformers** — For embedding text
 - **FastAPI** — Lightweight API for interaction
+- **Docker** — Portable app container
 
 ---
 
@@ -45,7 +46,8 @@ MediGuide/
 │       ├── index.faiss        # FAISS vector store
 │       └── index.pkl
 ├── tests/                     # Future unit tests
-├── venv/                      # Virtual environment (should be ignored)
+├── .github/workflows/ci.yml  # GitHub Actions workflow
+├── Dockerfile                 # For containerizing the app
 ├── .gitignore
 ├── README.md
 └── requirements.txt
@@ -55,35 +57,32 @@ MediGuide/
 
 ## ⚙️ How to Run
 
-### 1. Install dependencies
+### 🚀 Run with Docker (Recommended)
+```bash
+docker build -t mediguide .
+docker run -p 8000:8000 mediguide
+```
+
+To mount your FAISS index:
+```bash
+docker run -p 8000:8000 -v $(pwd)/rag/faiss_index:/app/rag/faiss_index mediguide
+```
+
+### 🐍 Run Locally
 ```bash
 pip install -r requirements.txt
-```
-
-### 2. Add drug PDFs to the `data/` folder
-
-### 3. Build vector index
-```bash
 python rag/ingest.py
-```
-
-### 4. Start the app
-Make sure Ollama is running (`ollama run mistral` or similar)
-
-```bash
 uvicorn app.main:app --reload
 ```
 
-### 5. Ask questions (via cURL or Postman)
+### 🔎 Query the API
 ```bash
-curl -X POST http://127.0.0.1:8000/ask \
-     -H "Content-Type: application/json" \
-     -d '{"query": "What are the side effects of ibuprofen?"}'
+curl -X POST http://127.0.0.1:8000/ask      -H "Content-Type: application/json"      -d '{"query": "What are the side effects of ibuprofen?"}'
 ```
 
 ---
 
-## 🔍 Example Query
+## 📬 Example Query
 
 **Input:**
 ```json
@@ -99,27 +98,23 @@ curl -X POST http://127.0.0.1:8000/ask \
 
 ---
 
-## 🎯 Why This Project
+## 🔄 CI/CD Pipeline
 
-- ✅ Demonstrates real-world use of LangChain + LLMs
-- ✅ Hands-on with embeddings, vector search, and local LLMs
-- ✅ Production-friendly design (can easily be expanded or deployed)
+A simple GitHub Actions workflow builds the Docker image and runs a smoke test to ensure the app starts cleanly.
 
 ---
 
-## 🧠 Future Improvements
+## 🎯 Why This Project
 
-- Add user upload support (dynamic RAG)
-- Switch FAISS to Chroma or Pinecone for scalability
-- Add Streamlit UI
-- Improve LLM summarization formatting
-- Deploy with Docker or Hugging Face Spaces
+- ✅ Demonstrates real-world use of LangChain + LLMs
+- ✅ Dockerized for reproducibility and deployment
+- ✅ Ready for extension, deployment, and testing
 
 ---
 
 ## 👩‍💻 Author
 
-**Salma Ouardi**  
+**Salma Ouardi**
 
 ---
 
