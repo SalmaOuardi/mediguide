@@ -2,7 +2,7 @@
 
 MediGuide is a lightweight, local **RAG (Retrieval-Augmented Generation)** app that lets users ask natural language questions about common medications and receive helpful answers based on trusted medical documents.
 
-🚀 Built in one day to demonstrate applied NLP, LangChain, and LLM deployment skills, now containerized using Docker for reproducibility and deployment.
+🚀 Built in one day to demonstrate applied NLP, LangChain, and LLM deployment skills, now containerized using Docker for reproducibility and deployment. A Streamlit UI was added for a clean, accessible user experience with a professional medical theme.
 
 ---
 
@@ -26,6 +26,7 @@ MediGuide uses a **local LLM (via Ollama)** + a **vector database (FAISS)** to:
 - **FAISS** — Fast vector similarity search
 - **HuggingFace Sentence Transformers** — For embedding text
 - **FastAPI** — Lightweight API for interaction
+- **Streamlit** — UI for asking questions and receiving answers
 - **Docker** — Portable app container
 
 ---
@@ -35,7 +36,8 @@ MediGuide uses a **local LLM (via Ollama)** + a **vector database (FAISS)** to:
 ```
 MediGuide/
 ├── app/
-│   └── main.py                # FastAPI app
+│   ├── main.py                # FastAPI app
+│   └── ui.py                  # Streamlit UI
 ├── data/
 │   └── who_drug_data.pdf      # Source PDF
 ├── notebooks/                 # (Optional) Jupyter notebooks
@@ -47,6 +49,7 @@ MediGuide/
 │       └── index.pkl
 ├── tests/                     # Future unit tests
 ├── .github/workflows/ci.yml  # GitHub Actions workflow
+├── .streamlit/config.toml     # Custom dark mode theme
 ├── Dockerfile                 # For containerizing the app
 ├── .gitignore
 ├── README.md
@@ -75,9 +78,30 @@ python rag/ingest.py
 uvicorn app.main:app --reload
 ```
 
-### 🔎 Query the API
+---
+
+### 🧪 Use the Streamlit UI
+
+Make sure your FastAPI backend is running on port `8000`, then launch the UI:
+
 ```bash
-curl -X POST http://127.0.0.1:8000/ask      -H "Content-Type: application/json"      -d '{"query": "What are the side effects of ibuprofen?"}'
+streamlit run app/ui.py
+```
+
+You’ll get a clean healthcare-themed chatbot interface with:
+- A query input
+- A loading spinner
+- A styled, dark-mode friendly response box
+- A footer disclaimer
+
+---
+
+### 🔎 Query the API directly
+
+```bash
+curl -X POST http://127.0.0.1:8000/ask \
+     -H "Content-Type: application/json" \
+     -d '{"query": "What are the side effects of ibuprofen?"}'
 ```
 
 ---
@@ -108,6 +132,7 @@ A simple GitHub Actions workflow builds the Docker image and runs a smoke test t
 
 - ✅ Demonstrates real-world use of LangChain + LLMs
 - ✅ Dockerized for reproducibility and deployment
+- ✅ Streamlit UI for friendly human interaction
 - ✅ Ready for extension, deployment, and testing
 
 ---
